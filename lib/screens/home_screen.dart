@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:poop_tracker/screens/stats_screen.dart';
 import '../models/poop_entry.dart';
 import '../services/poop_storage.dart';
-import 'add_poop_screen.dart';
+import '../widgets/poop_icon_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +14,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PoopStorage _storage = PoopStorage();
   List<PoopEntry> _entries = [];
+  String _selectedIcon = 'assets/images/solid.png';
+  String _selectedLabel = 'Solid';
+
 
   @override
   void initState() {
@@ -98,23 +101,33 @@ class _HomeScreenState extends State<HomeScreen> {
           const Divider(),
           const Padding(
             padding: EdgeInsets.only(top: 10),
-            child: Text("NEW ENTRY", style: TextStyle(fontWeight: FontWeight.bold)),
+            child: Text("CHOOSE POOP TYPE", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.brown)),
           ),
-          Padding(padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 16),
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF9FC19D),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-              minimumSize: const Size.fromHeight(50),
-            ),
-            child: const Text("Add", style: TextStyle(fontSize: 18)),
-            onPressed: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const AddPoopScreen()),
+          PoopIconPicker(
+            onSelected: (icon, label) {
+              setState(() {
+                _selectedIcon = icon;
+                _selectedLabel = label;
+              });
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF9FC19D),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                minimumSize: const Size.fromHeight(50),
+              ),
+              child: const Text("Add", style: TextStyle(fontSize: 18)),
+              onPressed: () {
+                final entry = PoopEntry(
+                  iconPath: _selectedIcon,
+                  label: _selectedLabel,
+                  timestamp: DateTime.now(),
                 );
-              if (result is PoopEntry) _addEntry(result);
-             },
+                _addEntry(entry);
+              },
             ),
           ),
         ],
