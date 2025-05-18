@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 
 class PoopIconPicker extends StatefulWidget {
-  final Function(String) onIconSelected;
+  final Function(String, String) onSelected;
 
-  const PoopIconPicker({super.key, required this.onIconSelected});
+  const PoopIconPicker({super.key, required this.onSelected});
 
   @override
   State<PoopIconPicker> createState() => _PoopIconPickerState();
 }
 
 class _PoopIconPickerState extends State<PoopIconPicker> {
-  final List<String> _iconPaths = [
-    'assets/images/poop1.png',
-    'assets/images/poop2.png',
-    'assets/images/poop3.png',
-    'assets/images/poop4.png',
-    'assets/images/poop5.png',
-    'assets/images/poop6.png',
+  final List<Map<String, String>> options = [
+    {"icon": "assets/images/watery.png", "label": "Watery"},
+    {"icon": "assets/images/soft.png", "label": "Soft"},
+    {"icon": "assets/images/lumpy.png", "label": "Lumpy"},
+    {"icon": "assets/images/gntle.png", "label": "Gntle"},
+    {"icon": "assets/images/solid.png", "label": "Solid"},
+    {"icon": "assets/images/splash.png", "label": "Splash"},
+    {"icon": "assets/images/pebble.png", "label": "Pebble"},
   ];
 
   int _selectedIndex = 0;
@@ -24,43 +25,42 @@ class _PoopIconPickerState extends State<PoopIconPicker> {
   @override
   void initState() {
     super.initState();
-    widget.onIconSelected(_iconPaths[_selectedIndex]);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onSelected(options[_selectedIndex]['icon']!, options[_selectedIndex]['label']!);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          children: List.generate(_iconPaths.length, (index) {
-            final isSelected = index == _selectedIndex;
-            return GestureDetector(
-              onTap: () {
-                setState(() => _selectedIndex = index);
-                widget.onIconSelected(_iconPaths[index]);
-              },
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
+    return Wrap(
+      spacing: 20,
+      runSpacing: 10,
+      alignment: WrapAlignment.center,
+      children: List.generate(options.length, (index){
+        final isSelected = index == _selectedIndex;
+        final icon = options[index]['icon']!;
+        final label = options[index]['label']!;
+        return GestureDetector(
+          onTap: (){
+            setState(() => _selectedIndex = index);
+            widget.onSelected(icon, label);
+          },
+          child: Column(
+            children: [
+              Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  border: isSelected
-                      ? Border.all(color: Colors.brown, width: 3)
-                      : null,
+                  border: isSelected ? Border.all(color: Colors.brown, width: 2) : null,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Image.asset(
-                  _iconPaths[index],
-                  height: 60,
-                  width: 60,
-                ),
+                child: Image.asset(icon, height: 60),
               ),
-            );
-          }),
-        ),
-      ),
+              const SizedBox(height: 4),
+              Text(label),
+            ],
+          ),
+        );
+      }),
     );
   }
 }
