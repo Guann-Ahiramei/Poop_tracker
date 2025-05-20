@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:tummytales/screens/main_screen.dart';
 
 
-class PoopTrackerApp extends StatelessWidget {
-  const PoopTrackerApp({super.key});
+class TummyTalesApp extends StatelessWidget {
+  const TummyTalesApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Poop Tracker',
+      debugShowCheckedModeBanner: false,
+      title: 'TummyTales',
       theme: ThemeData(
-        primarySwatch: Colors.brown,
-        textTheme:
-        GoogleFonts.quicksandTextTheme(
+        scaffoldBackgroundColor: const Color(0xFFFDF4E8),
+        textTheme: GoogleFonts.quicksandTextTheme(
           Theme.of(context).textTheme,
         ),
-        // const TextTheme(
-        //   bodyMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        // ),
       ),
-      home: const HomeScreen(),
+      home: const MainScreen(), // 👈 现在以主界面为入口
     );
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "744897114410",
+    "project_id": "tummytales-69297",
+    "storage_bucket": "tummytales-69297.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744897114410:android:2b9e984a5110e4e0e82e53",
+        "android_client_info": {
+          "package_name": "com.xinyi.tummytales"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeXQwf_TUlSwMnd7vyvoBXl60NCxKs6MM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

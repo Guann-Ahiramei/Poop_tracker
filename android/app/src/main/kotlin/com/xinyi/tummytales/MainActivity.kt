@@ -1,4 +1,4 @@
-package com.example.poop_tracker
+package com.xinyi.tummytales
 
 import io.flutter.embedding.android.FlutterActivity
 

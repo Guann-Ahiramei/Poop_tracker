@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:poop_tracker/screens/stats_screen.dart';
+import 'package:tummytales/screens/stats_screen.dart';
 import '../models/poop_entry.dart';
 import '../services/poop_storage.dart';
 import '../widgets/poop_icon_picker.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final List<PoopEntry> entries;
+  final Function(PoopEntry) onNewEntry;
+
+  const HomeScreen({
+    super.key,
+    required this.entries,
+    required this.onNewEntry,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -13,21 +20,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final PoopStorage _storage = PoopStorage();
-  List<PoopEntry> _entries = [];
+  List<PoopEntry> get _entries => widget.entries;
   String _selectedIcon = 'assets/images/solid.png';
   String _selectedLabel = 'Solid';
-
-
-  @override
-  void initState() {
-    super.initState();
-    _loadEntries();
-  }
-
-  void _loadEntries() async {
-    final loaded = await _storage.load();
-    setState(() => _entries = loaded);
-  }
 
   void _addEntry(PoopEntry entry) async {
     setState(() => _entries.add(entry));
@@ -76,6 +71,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFFDF4E8),
       appBar: AppBar(
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back, color: Colors.brown),
+        //   onPressed: () {
+        //     Navigator.pop(context); // 如果是嵌套在 Navigator 中
+        //   },
+        // ),
         backgroundColor: const Color(0xFFFFEFD6),
         elevation: 0,
         centerTitle: true,
@@ -126,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: _selectedLabel,
                   timestamp: DateTime.now(),
                 );
-                _addEntry(entry);
+                widget.onNewEntry(entry); // ✅ 通知 MainScreen 添加记录
               },
             ),
           ),
